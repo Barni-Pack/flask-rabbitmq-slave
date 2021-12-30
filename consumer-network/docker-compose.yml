@@ -1,0 +1,23 @@
+version: '3.2'
+
+# list of containers to be run
+services:
+
+  consumer:
+    build: consumer
+    depends_on:
+      - rabbit_mq
+    environment:
+      AMQP_URL: 'amqp://rabbit_mq?connection_attempts=10&retry_delay=10'
+    volumes:
+      - ./consumer:/usr/scr/thisapp/consumer
+    networks:
+      - rabbitmq_default
+  
+volumes:
+  rabbit_mqdata:
+    driver: local
+    
+networks:
+  rabbitmq_default:
+    external: true
